@@ -5,7 +5,7 @@ show it on the screen, with an option to speak the text.
 
 ## To Use
 1. Clone the repo
-2. Create a "data.json" file in the "src" directory composed of a single JSON array of quotes you want to serve
+2. Create a "data.json" file in the "public" directory composed of a single JSON array of quotes you want to serve
 3. Deploy to a webserver
  
 ## Available Scripts
