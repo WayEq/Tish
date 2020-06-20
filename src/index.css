@@ -49,3 +49,12 @@
 .left {
 	text-align: left;
 }
+
+.userText {
+    width: 50%;
+    margin: 30px auto 0px auto;
+}
+
+.nice-button {
+    margin: 10px
+}
