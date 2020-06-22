@@ -5,16 +5,26 @@ export class TextMatcher {
 
     matchQuote(text) {
         let that = this;
-        return this.quotes.reduce(function (acc, current) {
+        let best = this.quotes.reduce(function (acc, current) {
             let similarityValue = that.similarity(text, current);
             if (similarityValue > acc.score) {
                 return {best: current, score: similarityValue}
             }
             return acc;
-        }, {best: null, score: -10000}).best
+        }, {best: null, score: -10000})
+        console.log(best)
+        if (best.score===0) {
+            return this.getRandomQuote()
+        }
+        return best.best
 
     }
 
+
+
+    getRandomQuote() {
+        return this.quotes[Math.floor(Math.random() * this.quotes.length)];
+    }
     similarity(sample, candidate) {
         if (sample === "") return 1
         let sampleWords = sample.toLowerCase().match(/\b(\w+)\b/g)

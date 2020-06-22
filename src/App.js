@@ -1,61 +1,70 @@
 import React from 'react';
 import './index.css';
 import {Speaker} from "./Speaker";
-import {Quote} from "./Quote";
-import {RefreshButton} from "./RefreshButton";
+import {MessageArea} from "./MessageArea";
 import {InputArea} from "./InputBox";
 import {TextMatcher} from "./TextMatcher";
 
 let quotes = require('./data.json');
 
 class App extends React.Component {
-	constructor(props) {
-		super(props);
-		this.textMatcher = new TextMatcher(quotes);
+    constructor(props) {
+        super(props);
+        this.textMatcher = new TextMatcher(quotes);
+        let randomQuote = this.textMatcher.getRandomQuote();
+        this.state = {
+            messageHistory: [
+                {
+                direction : "incoming",
+                quote: randomQuote
+            }
+            ],
+            voices: speechSynthesis.getVoices(),
+            voice: null,
+            isLoading: false
+        };
 
-		this.state = {
-			quote: quotes[Math.floor(Math.random() * quotes.length)],
-			voices : speechSynthesis.getVoices(),
-			voice: null,
-			isLoading: false 
-		};
 
-		speechSynthesis.onvoiceschanged = () =>  this.setState({voices : speechSynthesis.getVoices()});
-		speechSynthesis.getVoices();
-	}
+        speechSynthesis.onvoiceschanged = () => this.setState({voices: speechSynthesis.getVoices()});
+        speechSynthesis.getVoices();
+    }
 
-	render() {
-		return(<div className="container centered">
-				<Quote value={this.state.quote} isLoading={this.state.isLoading}  />
-				<InputArea onClick={(text) => this.handleUserEntry(text)}/>
-				<br />
-				<br />
-				<br />
-				<Speaker voice={this.state.voice} voices={this.state.voices} quote={this.state.quote} onChange={voice => this.handleSpeakerChange(voice)} />
-				<br />
-				<RefreshButton onClick={() => this.handleRefreshQuote()} />
-				</div>
-		);
-	}
-	
-	handleSpeakerChange(newVoice) {
-		this.setState({voice: newVoice});
-	}
 
-	handleRefreshQuote() {
-		this.setState({isLoading: true});
-		setTimeout(() => { this.setState({isLoading: false, quote: quotes[Math.floor(Math.random() * quotes.length)]});}, 1000); 
-		this.setState({quote: quotes[Math.floor(Math.random() * quotes.length)]});	
-	}
+    render() {
+        return (<div className="container">
+                <MessageArea messageHistory={this.state.messageHistory} isLoading={this.state.isLoading}/>
+                <InputArea onClick={(text) => this.handleUserEntry(text)}/>
+                <br/>
+                <br/>
+                <br/>
+                <Speaker onClick={() => this.speak() }voice={this.state.voice} voices={this.state.voices} quote={this.state.messageHistory}
+                         onChange={voice => this.handleSpeakerChange(voice)}/>
+                <br/>
+            </div>
+        );
+    }
+    speak() {
+        let text = this.state.messageHistory[this.state.messageHistory.length-1].quote;
+        let utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = speechSynthesis.getVoices().find(element => element.name === this.state.voice);
+        speechSynthesis.speak(utterance);
+    }
 
-	handleUserEntry(text) {
-		this.setState({isLoading: true});
+    handleSpeakerChange(newVoice) {
+        this.setState({voice: newVoice});
+    }
 
-		let quote = this.textMatcher.matchQuote(text);
-		setTimeout(() => {
-			this.setState({isLoading: false, quote: quote});}, 1000);
-		this.setState({quote: quotes[Math.floor(Math.random() * quotes.length)]});
-	}
+    handleUserEntry(text) {
+
+        this.state.messageHistory.push({quote : text, direction : "outbound"})
+        this.setState({isLoading: true, messageHistory: this.state.messageHistory});
+        setTimeout(() => {
+            this.state.messageHistory.push({quote: this.textMatcher.matchQuote(text), direction: "incoming"})
+            this.speak()
+                this.setState({isLoading: false, messageHistory: this.state.messageHistory});
+            }, 1000);
+
+    }
 }
 
 export default App;

@@ -1,8 +1,8 @@
 .container {
-	margin: auto;
-	width: 75%;
-	height:50%;
-	padding: 70px;
+    margin: auto;
+    width: 75%;
+    height: 50%;
+    padding: 70px;
 
 }
 
@@ -10,48 +10,77 @@
     background-color: #f8f8f8;
     border: 1px solid #c8c8c8;
     border-radius: 5px;
-    font-family:    Arial, Helvetica, sans-serif;
-	 font-size:      30px;
-	 display: inline-block;
-	 vertical-align: middle;
-	 padding: 10px;
-	 margin:auto;
-	position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px;
+    margin: 10px auto;
+    position: relative;
 }
 
-.speech-bubble .arrow {
+.speech-bubble .tail-left {
     border-style: solid;
     position: absolute;
-}
-
-.bottom {
     border-color: #c8c8c8 transparent transparent transparent;
     border-width: 8px 8px 0px 8px;
     bottom: -8px;
 }
 
-.bottom:after {
+.speech-bubble .tail-right {
+    border-style: solid;
+    position: absolute;
+    border-color: #c8c8c8 transparent transparent transparent;
+    border-width: 8px 8px 0px 8px;
+    bottom: -8px;
+    right: 7px;
+}
+
+.speech-bubble .tail-left:after {
     border-color: #f8f8f8 transparent transparent transparent;
     border-style: solid;
     border-width: 7px 7px 0px 7px;
     bottom: 1px;
     content: "";
     position: absolute;
-    left: -7px;    
+    left: -7px;
 }
+
+.speech-bubble .tail-right:after {
+    border-color: aquamarine transparent transparent transparent;
+    border-style: solid;
+    border-width: 7px 7px 0px 7px;
+    bottom: 1px;
+    content: "";
+    position: absolute;
+    left: -7px;
+}
+
 
 .loading {
-	margin-top: 10px;
-}
-.centered {
-	text-align: center;
-}
-.left {
-	text-align: left;
+    margin-top: 10px;
 }
 
+.centered {
+    text-align: center;
+}
+
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+
+.incoming {
+}
+
+.outbound {
+    background: aquamarine;
+}
 .userText {
     width: 50%;
+    display: block;
     margin: 30px auto 0px auto;
 }
 

@@ -4,7 +4,7 @@ export class Speaker extends React.Component {
     render() {
         return (<div className="centered">
                 <VoiceList voices={this.props.voices} onChange={voice => this.props.onChange(voice)}/>
-                <SpeakButton voice={this.props.voice} quote={this.props.quote}/>
+                <SpeakButton onClick={() => this.props.onClick()} voice={this.props.voice} quote={this.props.quote}/>
             </div>
         );
     }
@@ -12,13 +12,7 @@ export class Speaker extends React.Component {
 
 class SpeakButton extends React.Component {
     render() {
-        return(<button className="nice-button" onClick={() => this.speak()}>Speak!</button>);
-    }
-
-    speak() {
-        let utterance = new SpeechSynthesisUtterance(this.props.quote);
-        utterance.voice = speechSynthesis.getVoices().find(element => element.name === this.props.voice);
-        speechSynthesis.speak(utterance);
+        return(<button className="nice-button" onClick={() => this.props.onClick()}>Speak!</button>);
     }
 }
 
